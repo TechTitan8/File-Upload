@@ -1,5 +1,6 @@
 import os
 import environ
+import dj_database_url
 
 # Initialize environ
 env = environ.Env(
@@ -64,6 +65,15 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# Override database configuration for Vercel
+if 'VERCEL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='postgresql://postgres:postgres@localhost/vercel',
+            conn_max_age=600,
+        )
+    }
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
