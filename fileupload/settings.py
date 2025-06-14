@@ -28,16 +28,8 @@ INSTALLED_APPS = [
     'files.apps.FilesConfig',
 ]
 
-# Static files configuration
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Disable Django's default file handling for Vercel
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.InMemoryStorage'
-
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',  # Make sure this is first
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,5 +67,16 @@ DATABASES = {
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
-# Static files configuration for Vercel
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Security Settings for Vercel
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Static files configuration
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
